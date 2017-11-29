@@ -9,7 +9,7 @@ public class Question2 {
 	// Assignment: https://pastebin.com/BMd61PUv
 	// Data: https://pastebin.com/wGmzZHeq
 	public static void main(String[] args) throws IOException {
-		String input = new String(Files.readAllBytes(Paths.get("src/input")), "UTF-8");
+		String input = new String(Files.readAllBytes(Paths.get("input")), "UTF-8");
 		String[] sentences = input.split("\\s*Start\\s*");
 		ArrayList<int[]> a = new ArrayList<>();
 		ArrayList<int[]> b = new ArrayList<>();
