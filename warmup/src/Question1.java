@@ -29,10 +29,10 @@ public class Question1 {
 					x += 1;
 					break;
 				case "A":
-					longest = Math.max(longest, x + y);
+					longest = Math.max(longest, Math.abs(x) + Math.abs(y));
 					break;
 				case "B":
-					longest = Math.max(longest, x + y);
+					longest = Math.max(longest, Math.abs(x) + Math.abs(y));
 					break;
 				}
 			}
