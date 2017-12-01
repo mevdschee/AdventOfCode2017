@@ -7,7 +7,7 @@ public class Question1 {
 	// Assignment: https://pastebin.com/BMd61PUv
 	// Data: https://pastebin.com/wGmzZHeq
 	public static void main(String[] args) throws IOException {
-		String input = new String(Files.readAllBytes(Paths.get("input")), "UTF-8");
+		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
 		String[] sentences = input.split("\\s*Start\\s*");
 		int longest = -1;
 		for (String sentence : sentences) {
