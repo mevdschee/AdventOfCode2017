@@ -5,7 +5,8 @@ import java.nio.file.Paths;
 public class Question2 {
 
 	public static void main(String[] args) throws IOException {
-		String[] rows = new String(Files.readAllBytes(Paths.get("input"))).trim().split("\\n");
+		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
+		String[] rows = input.split("\\n");
 		int sum = 0;
 		for (int i = 0; i < rows.length; i++) {
 			String[] words = rows[i].trim().split("\\s+");
