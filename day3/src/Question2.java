@@ -12,6 +12,9 @@ public class Question2 {
 				if (j < 0 || j >= field[i].length) {
 					continue;
 				}
+				if (i == x && j == y) {
+					continue;
+				}
 				sum += field[i][j];
 			}
 		}
