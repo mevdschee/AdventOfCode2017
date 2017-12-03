@@ -32,13 +32,15 @@ public class Question1 {
 				x += 1;
 			}
 		}
+		int val = 0;
 		for (y = 0; y < size; y++) {
 			for (x = 0; x < size; x++) {
 				if (field[x][y] == input) {
-					System.out.println(Math.abs(x - cx) + Math.abs(y - cy));
+					val = Math.abs(x - cx) + Math.abs(y - cy);
 				}
 			}
 		}
+		System.out.println(val);
 	}
 
 }
