@@ -27,10 +27,9 @@ public class Question2 {
 		if (size % 2 == 0) {
 			size += 1;
 		}
-		int cx = size / 2;
-		int cy = size / 2;
-		int x = cx;
-		int y = cy;
+		int origin = size / 2;
+		int x = origin;
+		int y = origin;
 		int[][] field = new int[size][size];
 		for (int e = 1; e <= size; e += 2) {
 			for (int i = 0; i < e - 2; i++) {

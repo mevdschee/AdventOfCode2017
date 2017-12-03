@@ -8,10 +8,9 @@ public class Question1 {
 		if (size % 2 == 0) {
 			size += 1;
 		}
-		int cx = size / 2;
-		int cy = size / 2;
-		int x = cx;
-		int y = cy;
+		int origin = size / 2;
+		int x = origin;
+		int y = origin;
 		int[][] field = new int[size][size];
 		int n = 1;
 		for (int e = 1; e <= size; e += 2) {
@@ -36,7 +35,7 @@ public class Question1 {
 		for (y = 0; y < size; y++) {
 			for (x = 0; x < size; x++) {
 				if (field[x][y] == input) {
-					val = Math.abs(x - cx) + Math.abs(y - cy);
+					val = Math.abs(x - origin) + Math.abs(y - origin);
 				}
 			}
 		}
