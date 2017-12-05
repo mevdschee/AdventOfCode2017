@@ -8,11 +8,11 @@ public class Question1 {
 		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
 		String[] lines = input.split("\\n");
 		int[] instructions = new int[lines.length];
-		int jumps = 0;
 		for (int i = 0; i < lines.length; i++) {
 			instructions[i] = Integer.valueOf(lines[i]);
 		}
 		int pos = 0;
+		int jumps = 0;
 		while (true) {
 			int offset = instructions[pos];
 			instructions[pos]++;
