@@ -10,7 +10,7 @@ public class Question2 {
 		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
 		String[] numbers = input.split("\\s+");
 		int[] banks = new int[numbers.length];
-		for (int i = 0; i < numbers.length; i++) {
+		for (int i = 0; i < banks.length; i++) {
 			banks[i] = Integer.valueOf(numbers[i]);
 		}
 		HashMap<String, Integer> states = new HashMap<>();
@@ -18,21 +18,15 @@ public class Question2 {
 		int result;
 		while (true) {
 			int highest = 0;
-			for (int i = 1; i < numbers.length; i++) {
+			for (int i = 1; i < banks.length; i++) {
 				if (banks[i] > banks[highest]) {
 					highest = i;
 				}
 			}
-			int add = (int) Math.ceil((float) banks[highest] / numbers.length);
-			for (int i = 0; i < numbers.length; i++) {
-				if (banks[highest] >= add) {
-					banks[highest] -= add;
-					banks[(highest + 1 + i) % numbers.length] += add;
-				} else {
-					int left = banks[highest];
-					banks[highest] -= left;
-					banks[(highest + 1 + i) % numbers.length] += left;
-				}
+			int add = banks[highest];
+			banks[highest] = 0;
+			for (int i = 0; i < add; i++) {
+				banks[(highest + 1 + i) % banks.length]++;
 			}
 			steps++;
 			String key = Arrays.toString(banks);
