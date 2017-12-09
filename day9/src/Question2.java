@@ -8,21 +8,14 @@ public class Question2 {
 		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
 		String[] lines = input.split("\\n");
 		for (String line : lines) {
-			int depth = 0;
 			int count = 0;
 			int i = 0;
 			boolean garbage = false;
 			while (i < line.length()) {
 				if (!garbage) {
 					switch (line.charAt(i)) {
-					case '{':
-						depth++;
-						break;
 					case '<':
 						garbage = true;
-						break;
-					case '}':
-						depth--;
 						break;
 					}
 				} else {
