@@ -9,26 +9,25 @@ public class Question2 {
 		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
 		String[] lines = input.split("\\n");
 		HashMap<Integer, HashMap<Integer, Boolean>> connections = new HashMap<>();
+		HashMap<Integer, Boolean> numbers = new HashMap<>();
 		// initialize
 		for (String line : lines) {
 			String[] parts = line.split("<->");
 			int source = Integer.valueOf(parts[0].trim());
-			String[] numbers = parts[1].trim().split(",");
-			for (String number : numbers) {
-				int target = Integer.valueOf(number.trim());
+			parts = parts[1].trim().split(",");
+			for (String part : parts) {
+				int target = Integer.valueOf(part.trim());
 				if (!connections.containsKey(source)) {
 					connections.put(source, new HashMap<>());
 				}
 				connections.get(source).put(target, true);
+				numbers.put(source, true);
 				if (!connections.containsKey(target)) {
 					connections.put(target, new HashMap<>());
 				}
 				connections.get(target).put(source, true);
+				numbers.put(target, true);
 			}
-		}
-		HashMap<Integer, Boolean> numbers = new HashMap<>();
-		for (int i = 0; i < 2000; i++) {
-			numbers.put(i, true);
 		}
 		int groups = 0;
 		while (true) {
