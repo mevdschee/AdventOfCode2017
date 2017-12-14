@@ -53,7 +53,7 @@ public class Question2 {
 		if (coords.get(y).size() == 0) {
 			coords.remove(y);
 		}
-		// remove neighbours
+		// remove neighbors
 		ArrayList<int[]> n = new ArrayList<>();
 		n.add(new int[] { x - 1, y });
 		n.add(new int[] { x + 1, y });
