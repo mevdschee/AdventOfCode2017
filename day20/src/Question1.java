@@ -7,8 +7,9 @@ public class Question1 {
 	public static void main(String[] args) throws IOException {
 		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
 		String[] lines = input.split("\\n");
-		long[][][] p = new long[3][lines.length][3];
-		boolean[] removed = new boolean[lines.length];
+		int points = lines.length;
+		long[][][] p = new long[3][points][3];
+		boolean[] removed = new boolean[points];
 		// parse
 		for (int i = 0; i < lines.length; i++) {
 			String[] values = lines[i].split(">,");
@@ -25,17 +26,13 @@ public class Question1 {
 		long max = Integer.MAX_VALUE;
 		while (true) {
 			int c = 0;
-			for (int i = 0; i < p[0].length; i++) {
+			for (int i = 0; i < points; i++) {
 				if (removed[i]) {
 					continue;
 				}
-				// increase velocity
-				for (int j = 0; j < 3; j++) {
-					p[1][i][j] += p[2][i][j];
-				}
-				// increase position
 				long d = 0;
 				for (int j = 0; j < 3; j++) {
+					p[1][i][j] += p[2][i][j];
 					p[0][i][j] += p[1][i][j];
 					d += Math.abs(p[0][i][j]);
 				}

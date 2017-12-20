@@ -9,9 +9,10 @@ public class Question2 {
 	public static void main(String[] args) throws IOException {
 		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
 		String[] lines = input.split("\\n");
-		long[][][] p = new long[3][lines.length][3];
-		boolean[] removed = new boolean[lines.length];
-		boolean[] collided = new boolean[lines.length];
+		int points = lines.length;
+		long[][][] p = new long[3][points][3];
+		boolean[] removed = new boolean[points];
+		boolean[] collided = new boolean[points];
 		// parse
 		for (int i = 0; i < lines.length; i++) {
 			String[] values = lines[i].split(">,");
@@ -28,17 +29,13 @@ public class Question2 {
 		while (true) {
 			int c = 0;
 			HashMap<String, Integer> positions = new HashMap<>();
-			for (int i = 0; i < p[0].length; i++) {
+			for (int i = 0; i < points; i++) {
 				if (removed[i] || collided[i]) {
 					continue;
 				}
-				// increase velocity
-				for (int j = 0; j < 3; j++) {
-					p[1][i][j] += p[2][i][j];
-				}
-				// increase position
 				long d = 0;
 				for (int j = 0; j < 3; j++) {
+					p[1][i][j] += p[2][i][j];
 					p[0][i][j] += p[1][i][j];
 					d += Math.abs(p[0][i][j]);
 				}
@@ -50,11 +47,8 @@ public class Question2 {
 				if (!positions.containsKey(key)) {
 					positions.put(key, i);
 				} else {
-					int j = positions.get(key);
 					collided[i] = true;
-					removed[i] = true;
-					collided[j] = true;
-					removed[j] = true;
+					collided[positions.get(key)] = true;
 				}
 			}
 			if (c == 0) {
@@ -67,7 +61,7 @@ public class Question2 {
 				c++;
 			}
 		}
-		System.out.println(p[0].length - c);
+		System.out.println(points - c);
 	}
 
 }
