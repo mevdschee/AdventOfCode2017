@@ -27,8 +27,8 @@ public class Question2 {
 		// execute
 		long max = Integer.MAX_VALUE;
 		while (true) {
-			int c = 0;
 			HashMap<String, Integer> positions = new HashMap<>();
+			int c = 0;
 			for (int i = 0; i < points; i++) {
 				if (removed[i] || collided[i]) {
 					continue;

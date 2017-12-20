@@ -22,7 +22,7 @@ public class Question1 {
 			removed[i] = false;
 		}
 		// execute
-		int minp = -1;
+		int last = -1;
 		long max = Integer.MAX_VALUE;
 		while (true) {
 			int c = 0;
@@ -40,13 +40,13 @@ public class Question1 {
 					removed[i] = true;
 				}
 				c++;
-				minp = i;
+				last = i;
 			}
 			if (c == 1) {
 				break;
 			}
 		}
-		System.out.println(minp);
+		System.out.println(last);
 	}
 
 }
