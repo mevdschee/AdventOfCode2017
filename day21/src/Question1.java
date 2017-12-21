@@ -21,57 +21,86 @@ public class Question1 {
 		return next;
 	}
 
+	private static String[] extract(String[] prev, int x, int y, int sp) {
+		String[] cell = new String[sp];
+		for (int j = 0; j < sp; j++) {
+			cell[j] = prev[y * sp + j].substring(x * sp, (x + 1) * sp);
+		}
+		return cell;
+	}
+
+	private static void append(String[] next, int x, int y, String[] cell) {
+		int sn = cell.length;
+		for (int j = 0; j < sn; j++) {
+			if (next[y * sn + j] == null) {
+				next[y * sn + j] = "";
+			}
+			next[y * sn + j] += cell[j];
+		}
+	}
+
 	public static void main(String[] args) throws IOException {
-		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
+		String input = new String(Files.readAllBytes(Paths.get("input.test"))).trim();
 		String[] lines = input.split("\\n");
-		HashMap<Integer, HashMap<String[], String[]>> rules = new HashMap<>();
-		rules.put(0, new HashMap<>());
-		rules.put(1, new HashMap<>());
+		HashMap<Integer, HashMap<String, String>> rules = new HashMap<>();
+		rules.put(2, new HashMap<>());
+		rules.put(3, new HashMap<>());
 		// initialize
 		for (int i = 0; i < lines.length; i++) {
 			String[] patterns = lines[i].split(" => ");
 			String[] p0 = patterns[0].split("/");
-			String[] p1 = patterns[1].split("/");
-			if (p0.length == 2 && p1.length == 3) {
-				String[] v = new String[] { p1[0], p1[1], p1[2] };
+			String p1 = patterns[1];
+			int sp = p0.length;
+			if (sp == 2) {
+				HashMap<String, String> rsp = rules.get(sp);
 				for (int r = 0; r < 4; r++) {
-					rules.get(0).put(new String[] { p0[0], p0[1] }, v);
-					rules.get(0).put(new String[] { reverse(p0[0]), reverse(p0[1]) }, v);
-					rules.get(0).put(new String[] { p0[1], p0[0] }, v);
-					rules.get(0).put(new String[] { reverse(p0[1]), reverse(p0[0]) }, v);
+					rsp.put(String.join("/", new String[] { p0[0], p0[1] }), p1);
+					rsp.put(String.join("/", new String[] { reverse(p0[0]), reverse(p0[1]) }), p1);
+					rsp.put(String.join("/", new String[] { p0[1], p0[0] }), p1);
+					rsp.put(String.join("/", new String[] { reverse(p0[1]), reverse(p0[0]) }), p1);
 					p0 = rotate(p0);
 				}
-			} else if (p0.length == 2 && p1.length == 3) {
-				String[] v = new String[] { p1[0], p1[1], p1[2], p1[3] };
+			} else if (sp == 3) {
+				HashMap<String, String> rsp = rules.get(sp);
 				for (int r = 0; r < 4; r++) {
-					rules.get(1).put(new String[] { p0[0], p0[1], p0[2] }, v);
-					rules.get(1).put(new String[] { reverse(p0[0]), reverse(p0[1]), reverse(p0[2]) }, v);
-					rules.get(1).put(new String[] { p0[2], p0[1], p0[0] }, v);
-					rules.get(1).put(new String[] { reverse(p0[2]), reverse(p0[1]), reverse(p0[0]) }, v);
+					rsp.put(String.join("/", new String[] { p0[0], p0[1], p0[2] }), p1);
+					rsp.put(String.join("/", new String[] { reverse(p0[0]), reverse(p0[1]), reverse(p0[2]) }), p1);
+					rsp.put(String.join("/", new String[] { p0[2], p0[1], p0[0] }), p1);
+					rsp.put(String.join("/", new String[] { reverse(p0[2]), reverse(p0[1]), reverse(p0[0]) }), p1);
 					p0 = rotate(p0);
 				}
 			}
 		}
 		// execute
 		String[] prev = new String[] { ".#.", "..#", "###" };
-		String[] next;
+		String[] next = new String[] {};
 		for (int i = 0; i < 5; i++) {
 			int sp = (i % 2 == 0 ? 3 : 2);
 			int cp = i + 1;
 			int sn = (i % 2 == 0 ? 2 : 3);
 			int cn = i + 2;
+			HashMap<String, String> rsp = rules.get(sp);
 			next = new String[sn * cn];
-			for (int x = 0; x < cp; x++) {
-				for (int y = 0; y < cp; y++) {
-					String[] cell = new String[sp];
-					for (int j = 0; j < sp; j++) {
-						cell[j] = prev[y * sp + j].substring(x * sp, (x + 1) * sp);
-					}
-					// append(next, match(prev));
+			for (int y = 0; y < cp; y++) {
+				for (int x = 0; x < cp; x++) {
+					String[] cell = extract(prev, x, y, sp);
+					String[] ncell = rsp.get(String.join("/", cell)).split("/");
+					append(next, x, y, ncell);
 				}
 			}
+			for (int p = 0; p < next.length; p++) {
+				System.out.println(next[p]);
+			}
+			prev = next;
 		}
-		// System.out.println(sound);
+		int count = 0;
+		for (int i = 0; i < next.length; i++) {
+			for (int j = 0; j < next[i].length(); j++) {
+				if (next[i].charAt(j) == '#')
+					count++;
+			}
+		}
+		System.out.println(count);
 	}
 
 }
