@@ -1,97 +1,105 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Question2 {
+
+	private static String reverse(String s) {
+		return new StringBuilder(s).reverse().toString();
+	}
+
+	private static String[] rotate(String[] prev) {
+		String[] next = new String[prev.length];
+		int n = prev.length;
+		for (int x = n - 1; x >= 0; x--) {
+			next[x] = "";
+			for (int y = 0; y < n; y++) {
+				next[x] += prev[y].charAt(x);
+			}
+		}
+		return next;
+	}
+
+	private static String[] extract(String[] prev, int x, int y, int sp) {
+		String[] cell = new String[sp];
+		for (int j = 0; j < sp; j++) {
+			cell[j] = prev[y * sp + j].substring(x * sp, (x + 1) * sp);
+		}
+		return cell;
+	}
+
+	private static void append(String[] next, int x, int y, String[] cell) {
+		int sn = cell.length;
+		for (int j = 0; j < sn; j++) {
+			if (next[y * sn + j] == null) {
+				next[y * sn + j] = "";
+			}
+			next[y * sn + j] += cell[j];
+		}
+	}
 
 	public static void main(String[] args) throws IOException {
 		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
 		String[] lines = input.split("\\n");
-		ArrayList<HashMap<String, Long>> registers = new ArrayList<>();
-		registers.add(new HashMap<>());
-		registers.add(new HashMap<>());
-		Pattern pattern = Pattern.compile("([a-z][a-z][a-z]) (([a-z])|([0-9-]+))( (([a-z])|([0-9-]+)))?");
-		int programs = 2;
+		HashMap<Integer, HashMap<String, String>> rules = new HashMap<>();
+		rules.put(2, new HashMap<>());
+		rules.put(3, new HashMap<>());
 		// initialize
-		for (int p = 0; p < programs; p++) {
-			for (int i = 0; i < lines.length; i++) {
-				Matcher matcher = pattern.matcher(lines[i].trim());
-				matcher.find();
-				String reg1 = matcher.group(3);
-				String reg2 = matcher.group(7);
-				if (reg1 != null) {
-					registers.get(p).put(reg1, 0l);
+		for (int i = 0; i < lines.length; i++) {
+			String[] patterns = lines[i].split(" => ");
+			String[] p0 = patterns[0].split("/");
+			String p1 = patterns[1];
+			int sp = p0.length;
+			if (sp == 2) {
+				HashMap<String, String> rsp = rules.get(sp);
+				for (int r = 0; r < 4; r++) {
+					rsp.put(String.join("/", new String[] { p0[0], p0[1] }), p1);
+					rsp.put(String.join("/", new String[] { reverse(p0[0]), reverse(p0[1]) }), p1);
+					rsp.put(String.join("/", new String[] { p0[1], p0[0] }), p1);
+					rsp.put(String.join("/", new String[] { reverse(p0[1]), reverse(p0[0]) }), p1);
+					p0 = rotate(p0);
 				}
-				if (reg2 != null) {
-					registers.get(p).put(reg2, 0l);
+			} else if (sp == 3) {
+				HashMap<String, String> rsp = rules.get(sp);
+				for (int r = 0; r < 4; r++) {
+					rsp.put(String.join("/", new String[] { p0[0], p0[1], p0[2] }), p1);
+					rsp.put(String.join("/", new String[] { reverse(p0[0]), reverse(p0[1]), reverse(p0[2]) }), p1);
+					rsp.put(String.join("/", new String[] { p0[2], p0[1], p0[0] }), p1);
+					rsp.put(String.join("/", new String[] { reverse(p0[2]), reverse(p0[1]), reverse(p0[0]) }), p1);
+					p0 = rotate(p0);
 				}
 			}
-			registers.get(p).put("p", (long) p);
 		}
 		// execute
-		long count = 0;
-		ArrayList<LinkedList<Long>> queue = new ArrayList<>();
-		queue.add(new LinkedList<Long>());
-		queue.add(new LinkedList<Long>());
-		int[] pc = new int[] { 0, 0 };
-		int p = 0;
-		while (true) {
-			int o = (p + 1) % programs;
-			while (true) {
-				Matcher matcher = pattern.matcher(lines[pc[p]].trim());
-				matcher.find();
-				String operation = matcher.group(1);
-				String reg1 = matcher.group(3);
-				long val1 = reg1 == null ? Integer.parseInt(matcher.group(4)) : registers.get(p).get(reg1);
-				String reg2 = null;
-				long val2 = 0;
-				if (matcher.group(7) != null || matcher.group(8) != null) {
-					reg2 = matcher.group(7);
-					val2 = reg2 == null ? Integer.parseInt(matcher.group(8)) : registers.get(p).get(reg2);
-				}
-				if (operation.equals("rcv") && queue.get(p).size() == 0) {
-					break;
-				}
-				switch (operation) {
-				case "snd":
-					queue.get(o).add(val1);
-					count += (p == 1 ? 1 : 0);
-					break;
-				case "set":
-					registers.get(p).put(reg1, val2);
-					break;
-				case "add":
-					registers.get(p).put(reg1, val1 + val2);
-					break;
-				case "mul":
-					registers.get(p).put(reg1, val1 * val2);
-					break;
-				case "mod":
-					registers.get(p).put(reg1, val1 % val2);
-					break;
-				case "rcv":
-					registers.get(p).put(reg1, queue.get(p).removeFirst());
-					break;
-				case "jgz":
-					if (val1 > 0) {
-						pc[p] += val2 - 1;
-					}
-					break;
-				}
-				pc[p]++;
-				if (pc[p] >= lines.length) {
+		String[] prev = new String[] { ".#.", "..#", "###" };
+		int iterations = 18;
+		String[] next = new String[] {};
+		for (int i = 0; i < iterations; i++) {
+			int sp, cp = 1;
+			for (sp = 2; sp <= 3; sp++) {
+				cp = prev.length / sp;
+				if (prev.length % sp == 0) {
 					break;
 				}
 			}
-			if (queue.get(p).size() == 0 && queue.get(o).size() == 0) {
-				break;
+			HashMap<String, String> rsp = rules.get(sp);
+			next = new String[(sp + 1) * cp];
+			for (int y = 0; y < cp; y++) {
+				for (int x = 0; x < cp; x++) {
+					String[] cell = extract(prev, x, y, sp);
+					String[] ncell = rsp.get(String.join("/", cell)).split("/");
+					append(next, x, y, ncell);
+				}
 			}
-			p = (p + 1) % programs;
+			prev = next;
+		}
+		int count = 0;
+		for (int i = 0; i < next.length; i++) {
+			for (int j = 0; j < next[i].length(); j++) {
+				if (next[i].charAt(j) == '#')
+					count++;
+			}
 		}
 		System.out.println(count);
 	}

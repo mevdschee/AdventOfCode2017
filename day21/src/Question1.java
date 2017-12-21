@@ -40,7 +40,7 @@ public class Question1 {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String input = new String(Files.readAllBytes(Paths.get("input.test"))).trim();
+		String input = new String(Files.readAllBytes(Paths.get("input"))).trim();
 		String[] lines = input.split("\\n");
 		HashMap<Integer, HashMap<String, String>> rules = new HashMap<>();
 		rules.put(2, new HashMap<>());
@@ -73,23 +73,24 @@ public class Question1 {
 		}
 		// execute
 		String[] prev = new String[] { ".#.", "..#", "###" };
+		int iterations = 5;
 		String[] next = new String[] {};
-		for (int i = 0; i < 5; i++) {
-			int sp = (i % 2 == 0 ? 3 : 2);
-			int cp = i + 1;
-			int sn = (i % 2 == 0 ? 2 : 3);
-			int cn = i + 2;
+		for (int i = 0; i < iterations; i++) {
+			int sp, cp = 1;
+			for (sp = 2; sp <= 3; sp++) {
+				cp = prev.length / sp;
+				if (prev.length % sp == 0) {
+					break;
+				}
+			}
 			HashMap<String, String> rsp = rules.get(sp);
-			next = new String[sn * cn];
+			next = new String[(sp + 1) * cp];
 			for (int y = 0; y < cp; y++) {
 				for (int x = 0; x < cp; x++) {
 					String[] cell = extract(prev, x, y, sp);
 					String[] ncell = rsp.get(String.join("/", cell)).split("/");
 					append(next, x, y, ncell);
 				}
-			}
-			for (int p = 0; p < next.length; p++) {
-				System.out.println(next[p]);
 			}
 			prev = next;
 		}
