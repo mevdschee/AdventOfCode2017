@@ -87,8 +87,8 @@ public class Question1 {
 			next = new String[(sp + 1) * cp];
 			for (int y = 0; y < cp; y++) {
 				for (int x = 0; x < cp; x++) {
-					String[] cell = extract(prev, x, y, sp);
-					String[] ncell = rsp.get(String.join("/", cell)).split("/");
+					String[] ccell = extract(prev, x, y, sp);
+					String[] ncell = rsp.get(String.join("/", ccell)).split("/");
 					append(next, x, y, ncell);
 				}
 			}
