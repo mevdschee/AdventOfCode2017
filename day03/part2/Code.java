@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Code {
 
@@ -25,7 +27,7 @@ public class Code {
 	}
 
 	public static void main(String[] args) throws IOException {
-		int input = 312051;
+		int input = Integer.parseInt(new String(Files.readAllBytes(Paths.get("input"))).trim());
 		int size = (int) Math.ceil(Math.sqrt(input));
 		if (size % 2 == 0) {
 			size += 1;
