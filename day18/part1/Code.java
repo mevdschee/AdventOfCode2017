@@ -40,7 +40,7 @@ public class Code {
 				reg2 = matcher.group(7);
 				val2 = reg2 == null ? Integer.parseInt(matcher.group(8)) : registers.get(reg2);
 			}
-			System.out.println(i + ":" + operation + "," + reg1 + "," + val2);
+			//System.out.println(i + ":" + operation + "," + reg1 + "," + val2);
 			if (operation.equals("rcv") && val1 != 0) {
 				break;
 			}
