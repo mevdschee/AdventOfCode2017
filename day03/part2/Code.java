@@ -57,7 +57,7 @@ public class Code {
 		int min = Integer.MAX_VALUE;
 		for (y = 0; y < size; y++) {
 			for (x = 0; x < size; x++) {
-				if (field[x][y] >= input) {
+				if (field[x][y] > input) {
 					min = Math.min(min, field[x][y]);
 				}
 			}
