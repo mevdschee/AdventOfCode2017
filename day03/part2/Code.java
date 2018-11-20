@@ -55,11 +55,17 @@ public class Code {
 			}
 		}
 		int min = Integer.MAX_VALUE;
-		for (y = 0; y < size; y++) {
-			for (x = 0; x < size; x++) {
-				if (field[x][y] > input) {
-					min = Math.min(min, field[x][y]);
+		for (int e = 1; e <= size; e += 2) {
+			min = Integer.MAX_VALUE;
+			for (y = origin-e; y < origin+e; y++) {
+				for (x = origin-e; x < origin+e; x++) {
+					if (field[x][y] > input) {
+						min = Math.min(min, field[x][y]);
+					}
 				}
+			}
+			if (min != Integer.MAX_VALUE) {
+				break;
 			}
 		}
 		System.out.println(min);
